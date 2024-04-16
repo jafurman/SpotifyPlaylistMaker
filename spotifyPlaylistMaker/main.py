@@ -22,7 +22,7 @@ except FileNotFoundError:
     print("Cache file not found.")
 
 client_id = '6f61d716331b4159b2a347c9d43eede7'
-client_secret = '9ee63325dd154481b4e3a3af24ad83e1'
+client_secret = 'nicetry'
 # Your new redirect URI
 redirect_uri = 'http://localhost:8080/callback'
 

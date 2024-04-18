@@ -22,7 +22,7 @@ except FileNotFoundError:
     print("Cache file not found.")
 
 client_id = '6f61d716331b4159b2a347c9d43eede7'
-client_secret = 'nicetry'
+client_secret = 'f6571b3094ad4cd2bb6978a4df8bcd75'
 # Your new redirect URI
 redirect_uri = 'http://localhost:8080/callback'
 
@@ -211,6 +211,7 @@ def checkLikedSongsGenres():
     # Cluster the genres
     p1, p2, p3, p4 = cluster_genres(genres_list, song_names)
 
+    '''
     deletePlaylist("Generated Playlist One")
     deletePlaylist("Generated Playlist Two")
     deletePlaylist("Generated Playlist Three")
@@ -219,6 +220,7 @@ def checkLikedSongsGenres():
     createPlaylist(p2, "Generated Playlist Two")
     createPlaylist(p3, "Generated Playlist Three")
     createPlaylist(p4, "Misc")
+    '''
 
     # Print songs associated with each cluster
     print(p1)

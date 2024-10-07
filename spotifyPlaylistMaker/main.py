@@ -1,6 +1,4 @@
-import urllib3
-import ssl
-import certifi
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import json
@@ -10,9 +8,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import re
 import os
+from sklearn.decomposition import PCA
+
 
 cache_path = "your_cache_path"
 try:
@@ -211,16 +209,15 @@ def checkLikedSongsGenres():
     # Cluster the genres
     p1, p2, p3, p4 = cluster_genres(genres_list, song_names)
 
-    '''
-    deletePlaylist("Generated Playlist One")
-    deletePlaylist("Generated Playlist Two")
-    deletePlaylist("Generated Playlist Three")
-    deletePlaylist("Misc")
-    createPlaylist(p1, "Generated Playlist One")
-    createPlaylist(p2, "Generated Playlist Two")
-    createPlaylist(p3, "Generated Playlist Three")
-    createPlaylist(p4, "Misc")
-    '''
+    deletePlaylist("P1")
+    deletePlaylist("P2")
+    deletePlaylist("P3")
+    deletePlaylist("P4")
+
+    createPlaylist(p1, "P1")
+    createPlaylist(p2, "P2")
+    createPlaylist(p3, "P3")
+    createPlaylist(p4, "P4")
 
     # Print songs associated with each cluster
     print(p1)
@@ -281,22 +278,17 @@ def plot_genre_pie_chart(genres_list):
 
 
 def cluster_genres(genres, song_names):
-    # Flatten the list of lists into a single list
     flattened_genres = [' '.join(sublist) for sublist in genres]
 
-    # Create TF-IDF vectorizer
     tfidf_vectorizer = TfidfVectorizer()
     tfidf_matrix = tfidf_vectorizer.fit_transform(flattened_genres)
 
-    # Perform K-means clustering
     num_clusters = 4
     kmeans = KMeans(n_clusters=num_clusters, random_state=42)
     cluster_labels = kmeans.fit_predict(tfidf_matrix)
 
-    # Initialize four separate lists for each cluster
     p1, p2, p3, p4 = [], [], [], []
 
-    # Group songs by cluster
     for song_name, label in zip(song_names, cluster_labels):
         if label == 0:
             p1.append(song_name)
@@ -306,6 +298,17 @@ def cluster_genres(genres, song_names):
             p3.append(song_name)
         elif label == 3:
             p4.append(song_name)
+
+    pca = PCA(n_components=2)
+    reduced_features = pca.fit_transform(tfidf_matrix.toarray())
+
+    # Visualize the clustered data points
+    plt.figure(figsize=(8, 6))
+    plt.scatter(reduced_features[:, 0], reduced_features[:, 1], c=cluster_labels, cmap='viridis')
+    plt.title('Clustered Data Points')
+    plt.xlabel('Principal Component 1')
+    plt.ylabel('Principal Component 2')
+    plt.show()
 
     return p1, p2, p3, p4
 

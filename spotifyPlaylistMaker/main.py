@@ -42,22 +42,6 @@ print(f"Email: {email}")
 print(f"Followers Count: {followers}")
 
 
-def getToken():
-    authString = client_id + ":" + client_secret
-    authBytes = authString.encode("utf-8")
-    authBase64 = str(base64.b64encode(authBytes), "utf-8")
-
-    url = "https://accounts.spotify.com/api/token"
-    headers = {
-        "Authorization": "Basic " + authBase64,
-        "Content_Type": "application/x-www-form-urlencoded"
-    }
-    data = {"grant_type": "client_credentials"}
-    result = post(url, headers=headers, data=data, verify=False)
-    jsonResult = json.loads(result.content)
-    token = jsonResult["access_token"]
-    return token
-
 
 def getAuthHeader(token):
     return {"Authorization": "Bearer " + token}
@@ -346,24 +330,6 @@ def deletePlaylist(playlist_name):
 
 
 # _______________________ MAIN METHOD ___________________________
-
-
-'''
-sp_oauth = SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri,
-                        scope='user-library-read user-top-read user-read-email playlist-read-private playlist-modify-public playlist-modify-private', requests_session=False)
-
-sp = spotipy.Spotify(auth_manager=sp_oauth)
-
-user_profile = sp.current_user()
-display_name = user_profile.get('display_name', 'N/A')
-email = user_profile.get('email', 'N/A')
-followers = user_profile.get('followers', {}).get('total', 'N/A')
-
-print(f"Display Name: {display_name}")
-print(f"Email: {email}")
-print(f"Followers Count: {followers}")
-
-'''
 
 while True:
     print()
